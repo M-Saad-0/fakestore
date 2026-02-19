@@ -15,16 +15,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       if (result.isFailed) {
-        emit(AuthErrorState());
+        emit(AuthErrorState(error: result.failure!));
         return;
       } else if (result.isSuccess) {
-        authService.secureToken(result.success!);
-        emit(AuthSuccesState());
+        final userId = await authService.getAndStoreUserId(result.value!);
+        if(userId ==-1){
+        emit(AuthErrorState(error: "Please try again"));
+        }
+        authService.secureToken(result.value!);
+        emit(AuthSuccesState(userId: userId));
       }
     });
-    on<AuthLogoutEvent>((event, emit) {
-      authService.logout();
+    on<AuthLogoutEvent>((event, emit) async{
+     await authService.logout();
       emit(AuthInitial());
+    });
+    on<AuthCheckLoginEvent>((event, emit) async{
+      final isloggedIn = await authService.checkifLoggedIn();
+      if(isloggedIn==-1){
+      emit(AuthInitial());
+      }else{
+      emit(AuthSuccesState(userId: isloggedIn));        
+      }
     });
   }
 }

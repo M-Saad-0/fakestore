@@ -14,7 +14,8 @@ class AuthLoginEvent extends AuthEvent{
  const AuthLoginEvent({required this.username, required this.password});
   
   @override
-  List<Object> get props => [];
+  List<Object> get props => [username, password];
 }
 
 class AuthLogoutEvent extends AuthEvent{}
+class AuthCheckLoginEvent extends AuthEvent{}

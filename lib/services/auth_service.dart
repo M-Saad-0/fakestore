@@ -17,21 +17,27 @@ class AuthService {
     try {
       final response = await dio.post(
         loginEndPoint,
+        options: Options(
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+          },
+        ),
         data: jsonEncode({"username": username, "password": password}),
       );
 
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        final jsonResponse = jsonDecode(response.data);
-        final token = jsonResponse['token'];
+        final token = response.data['token'];
         return Result.succeed(token);
       }
       if (response.statusCode! >= 400 && response.statusCode! < 500) {
-        return Result.succeed("Bad request found");
+        return Result.failed("Bad request found");
       } else {
-        return Result.succeed("Unknown Error Occured!");
+        return Result.failed("Unknown Error Occured!");
       }
+    } on DioException catch (e) {
+      return Result.failed(e.message ?? "An unexpected network error occurred");
     } catch (e) {
-      return Result.succeed(e.toString());
+      return Result.failed(e.toString());
     }
   }
 
@@ -39,7 +45,54 @@ class AuthService {
     await secureStorage.write(key: 'token', value: token);
   }
 
-  void logout() async {
+  Future<void> logout() async {
     await secureStorage.delete(key: 'token');
+  }
+
+  Future<int> checkifLoggedIn() async {
+    String? token = await secureStorage.read(key: 'token');
+    int? userId = int.tryParse(await secureStorage.read(key: "userId") ?? "");
+    return (token != null && userId != null) ? userId : -1;
+  }
+
+  Future<int> getAndStoreUserId(String token) async {
+    final userId = getUserIdFromToken(token);
+    secureStorage.write(key: "userId", value: (userId ?? -1).toString());
+    return userId ?? -1;
+  }
+
+  int? getUserIdFromToken(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) {
+        throw Exception('Invalid token');
+      }
+
+      String payload = parts[1];
+
+      payload = payload.replaceAll('-', '+').replaceAll('_', '/');
+
+      switch (payload.length % 4) {
+        case 0:
+          break;
+        case 2:
+          payload += '==';
+          break;
+        case 3:
+          payload += '=';
+          break;
+        default:
+          throw Exception('Illegal base64 string');
+      }
+
+      final String decodedStr = utf8.decode(base64.decode(payload));
+
+      final Map<String, dynamic> jsonPayload = json.decode(decodedStr);
+
+      return jsonPayload['sub'];
+    } catch (e) {
+      print('Error decoding token: $e');
+      return null;
+    }
   }
 }
