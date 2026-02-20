@@ -5,16 +5,16 @@ To run the Fake Store app, follow these steps:
 1. **Clone the Repository**: Clone this repository to your local machine using:
    ```bash
    git clone
-   https://github.com/M-Saad-0/fakestore```
+   https://github.com/M-Saad-0/fakestore
 2. **Navigate to the Project Directory**: Change into the project directory:
-   ```bash
-   cd fakestore```
+   ```bashcd fakestore
+   cd fakestore
 3. **Install Dependencies**: Install the required dependencies using:
-   ```bash
-   flutter pub get```
+   ```bash 
+   flutter pub get
 4. **Run the App**: Start the app on an emulator or physical device using:
-   ```bash
-   flutter run```
+   ```bash 
+   flutter run
 
 ## How to Start
 
