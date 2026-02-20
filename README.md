@@ -1,18 +1,24 @@
 # Fake Store App
 
-## How to start
+## How to Start
 
-- When app is launched there is a login screen. Fakestore api does not support creating new accounts. So instead we have to use existing account. Two of them given on the login screen.
+When the app is launched, you will be greeted by a **Login Screen**. Please note that the FakeStore API does not support the creation of new user accounts (POST requests to users do not persist). 
 
-- When app is logged we can see the product. Select category, search products and also add them to cart.
+To explore the app, please use the existing test accounts provided on the login screen:
+* **Username:** `johnd` | **Password:** `m38rmF$`
+* **Username:** `mor_2314` | **Password:** `83r5^_`
+
+Once logged in, you can browse products, filter by category, search for specific items, and manage your shopping cart.
+
 
 ## Working Features
-- User Authentication : Working
-- Product Listing : Working
-- Adding to Cart  : Working
-- Selecting Categories : Working
-- Searching Products : Working
-- Changing Theme : Working
+- *User Authentication* : Session is stored in secure storage and is used to maintain login state across app restarts.
+- *Product Listing* : Products are fetched from the API and displayed in a grid view with pagination.
+- *Cart Management*  : Users can add products to the cart, view cart contents, and remove items from the cart. But note that cart changes are not persisted to the server because API does not support.
+- *Selecting Categories* : Users can filter products by selecting a category from the list of available categories.
+- *Searching Products* : Users can search for specific products by entering keywords in the search bar.
+- *Changing Theme* : Users can switch between light and dark themes.
+- *Product Detail* : Users can view detailed information about a selected product.
 
 
 ## Screenshots

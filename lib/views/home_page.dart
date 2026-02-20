@@ -1,14 +1,10 @@
-import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakestore/blocs/cart_bloc/cart_bloc.dart';
 import 'package:fakestore/blocs/product_bloc/product_bloc.dart';
-import 'package:fakestore/blocs/theme_bloc/theme_bloc.dart';
 import 'package:fakestore/constants/product_categories.dart';
 import 'package:fakestore/models/cart_model.dart';
 import 'package:fakestore/models/product_model.dart';
-import 'package:fakestore/views/cart_page.dart';
 import 'package:fakestore/views/product_detail_page.dart';
-import 'package:fakestore/views/theme_change_page.dart';
 import 'package:fakestore/widget/app_drawer.dart';
 import 'package:fakestore/widget/extensions.dart';
 import 'package:flutter/material.dart';
