@@ -62,3 +62,22 @@ class CartProductModel {
     return CartProductModel(productId: p??productId, quantity: q??quantity);
   }
 }
+
+
+class CartDisplayItem {
+  final int productId;
+  final String title;
+  final String imageUrl;
+  final double price;
+  final int quantity;
+
+  CartDisplayItem({
+    required this.productId,
+    required this.title,
+    required this.imageUrl,
+    required this.price,
+    required this.quantity,
+  });
+
+  double get total => price * quantity;
+}

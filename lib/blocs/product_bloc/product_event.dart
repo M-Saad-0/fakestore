@@ -16,8 +16,8 @@ class GetProductsByCategory extends ProductEvent{
 }
 
 class FilterProductsEvent extends ProductEvent{
-  final List<ProductModel> products;
-  const FilterProductsEvent({required this.products});
+  final String searchTerm;
+  const FilterProductsEvent({required this.searchTerm});
   @override
-  List<Object> get props => [products];
+  List<Object> get props => [searchTerm];
 }

@@ -7,6 +7,7 @@ part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
+  List<ProductModel> _products = <ProductModel>[];
   final ProductService productService;
   ProductBloc({required this.productService}) : super(ProductInitialState()) {
     on<GetProductsByCategory>((event, emit)async {
@@ -16,11 +17,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductErrorState(productResult.failure! ));
         return;
       } else if (productResult.isSuccess) {
+        _products = productResult.value!;
         emit(ProductSuccessState(productResult.value!));
       }
     });
     on<FilterProductsEvent>((event, emit) {
-      emit(ProductSuccessState(event.products));
+      if(event.searchTerm.isEmpty){
+        emit(ProductSuccessState(_products));
+        return;
+      }
+      emit(ProductSuccessState(_products.where((product) => product.title.toLowerCase().contains(event.searchTerm.toLowerCase())||product.category.toLowerCase().contains(event.searchTerm.toLowerCase())||product.description.toLowerCase().contains(event.searchTerm.toLowerCase())).toList()));
     });
   }
 }

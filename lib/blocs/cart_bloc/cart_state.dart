@@ -14,7 +14,7 @@ final class CartErrorState extends CartState {final String error; const CartErro
 List<Object> get props => [error];
 }
 final class CartSuccessState extends CartState {
-  final List<CartModel> carts;
+  final List<CartProductModel> carts;
   const CartSuccessState({required this.carts});
   @override
   List<Object> get props => [carts];

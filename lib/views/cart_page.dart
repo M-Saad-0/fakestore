@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakestore/blocs/cart_bloc/cart_bloc.dart';
 import 'package:fakestore/blocs/product_bloc/product_bloc.dart';
-import 'package:fakestore/models/cart_model.dart';
+import 'package:fakestore/widget/cart_result.dart';
+import 'package:fakestore/widget/cart_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,112 +11,118 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cart Page')),
-      body: BlocConsumer<ProductBloc, ProductState>(
+      appBar: AppBar(title: const Text('Your Cart')),
+      // Use MultiBlocListener for side effects (Snackbars)
+      body: BlocListener<CartBloc, CartState>(
         listener: (context, state) {
-          if (state is ProductErrorState) {
+          if (state is CartErrorState) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text('Error: ${state.message}')));
+            ).showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
-        builder: (context, productState) {
-          if (productState is ProductLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (productState is ProductErrorState) {
-            return Center(child: Text('Error: ${productState.message}'));
-          } else if (productState is ProductSuccessState) {
-            final products = productState.products;
-            return BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) {
-                if (state is CartLoadingState) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is CartErrorState) {
-                  return Center(child: Text('Error: ${state.error}'));
-                } else if (state is CartSuccessState) {
-                  final cartProducts = state.carts;
-                  if (cartProducts.first.products.isEmpty) {
-                    return const Center(child: Text('Your cart is empty'));
-                  }
-
-                  return ListView.builder(
-                    itemCount: cartProducts.first.products.length,
-                    itemBuilder: (context, index) {
-                      final cart = cartProducts.first.products[index];
-                      final productInCart = products.where(
-                        (e) => e.id == cart.productId,
-                      );
-                      final cartQuantity = cart.quantity;
-                      final cartProduct = cartProducts[index];
-                      return ListTile(
-                        leading: CachedNetworkImage(
-                          imageUrl: productInCart.first.image,
-                          width: 50,
-                          height: 50,
-                        ),
-                        title: Text(productInCart.first.title),
-                        subtitle: Text('\$${productInCart.first.price}'),
-                        trailing:
-                            cartQuantity > 0
-                                ? Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        context.read<CartBloc>().add(
-                                          AddToCartEvent(
-                                            userId: 1,
-                                            cartProductModel: CartProductModel(
-                                              productId: productInCart.first.id,
-                                              quantity: cartQuantity - 1,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(Icons.remove),
-                                    ),
-                                    Text('$cartQuantity'),
-                                    IconButton(
-                                      onPressed: () {
-                                        context.read<CartBloc>().add(
-                                          AddToCartEvent(
-                                            userId: 1,
-                                            cartProductModel: CartProductModel(
-                                              productId: productInCart.first.id,
-                                              quantity: cartQuantity + 1,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(Icons.add),
-                                    ),
-                                  ],
-                                )
-                                : IconButton(
-                                  onPressed: () {
-                                    context.read<CartBloc>().add(
-                                      AddToCartEvent(
-                                        userId: 1,
-                                        cartProductModel: CartProductModel(
-                                          productId: productInCart.first.id,
-                                          quantity: 1,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  icon: Icon(Icons.add_shopping_cart),
-                                ),
-                      );
-                    },
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            );
-          } else {
-            return const Center(child: Text('No products found'));
-          }
-        },
+        child: _buildCartContent(),
       ),
+    );
+  }
+
+  Widget _buildCartContent() {
+    // Access states directly or use a combined cubit
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, productState) {
+        return BlocBuilder<CartBloc, CartState>(
+          builder: (context, cartState) {
+            // 1. Handle Loading States [cite: 43]
+            if (productState is ProductLoadingState ||
+                cartState is CartLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            // 2. Data Validation
+            if (productState is ProductSuccessState &&
+                cartState is CartSuccessState) {
+              final userCarts = cartState.carts;
+
+              if (userCarts.isEmpty) {
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        size: 80,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Your cart is empty',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: 8),
+                      Text('Start adding some products!'),
+                    ],
+                  ),
+                );
+              }
+
+              // Take first cart (or loop if multi-cart support)
+              // final cart = userCarts.first;
+              // final cartItems = cart.products;
+
+              // if (.isEmpty) {
+              //   return const Center(child: Text('Cart is empty'));
+              // }
+
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: userCarts.length,
+                      itemBuilder: (context, index) {
+                        final item = userCarts[index];
+                        final product = productState.products.where(
+                          (p) => p.id == item.productId,
+                        ).firstOrNull;
+
+                        if (product == null) {
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            child: ListTile(
+                              leading: const Icon(
+                                Icons.broken_image,
+                                color: Colors.red,
+                              ),
+                              title: Text(
+                                'Product #${item.productId} (unavailable)',
+                              ),
+                              subtitle: Text('Qty: ${item.quantity}'),
+                              trailing: Text('Removed or invalid item'),
+                            ),
+                          );
+                        }
+
+                        return CartItemTile(
+                          product: product,
+                          quantity: item.quantity,
+                        );
+                      },
+                    ),
+                  ),
+                  CartSummaryFooter(
+                    products: productState.products,
+                    cartItems: userCarts,
+                  ),
+                ],
+              );
+            }
+
+            return const Center(child: Text('Something went wrong.'));
+          },
+        );
+      },
     );
   }
 }

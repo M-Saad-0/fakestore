@@ -14,8 +14,10 @@ final class AuthErrorState extends AuthState {final String error; const AuthErro
 List<Object> get props => [error];
 }
 final class AuthSuccesState extends AuthState {
-  final int userId;
-  const AuthSuccesState({required this.userId});
+  final UserModel user;
+  const AuthSuccesState({required this.user});
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [user];
 }
+
+final class AuthUnauthenticatedState extends AuthState {} 

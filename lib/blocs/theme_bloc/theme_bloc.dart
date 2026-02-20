@@ -7,28 +7,23 @@ part 'theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final int themeIndex = 0;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   ThemeBloc() : super(ThemeInitial()) {
     on<GetCurrentThemeEvent>((event, emit) async {
-      await getCurrentTheme(event, emit);
+      final themeIndexStr =
+          await secureStorage.read(key: 'themeIndex') ?? 0.toString();
+      print("Retrieved theme index from storage: $themeIndexStr");
+      final themeIndex = int.parse(themeIndexStr);
+      emit(ThemeChangeState(themeIndex: themeIndex));
     });
 
     on<ChangeThemeEvent>((event, emit) {
       themeIndex == event.themeIndex;
-      FlutterSecureStorage().write(
+      secureStorage.write(
         key: 'themeIndex',
         value: event.themeIndex.toString(),
       );
       emit(ThemeChangeState(themeIndex: event.themeIndex));
     });
-  }
-  Future<void> getCurrentTheme(
-    GetCurrentThemeEvent event,
-    Emitter<ThemeState> emit,
-  ) async {
-    final themeIndexStr = await FlutterSecureStorage().read(key: 'themeIndex');
-    if (themeIndexStr != null) {
-      final themeIndex = int.parse(themeIndexStr);
-      emit(ThemeChangeState(themeIndex: themeIndex));
-    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:fakestore/blocs/auth_bloc/auth_bloc.dart';
 import 'package:fakestore/blocs/cart_bloc/cart_bloc.dart';
 import 'package:fakestore/models/cart_model.dart';
 import 'package:fakestore/models/product_model.dart';
@@ -13,7 +14,7 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(productModel.title)),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,51 +41,44 @@ class ProductDetailPage extends StatelessWidget {
               productModel.description,
               style: const TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 24),
+            Spacer(),
+            // const Spacer(),
             BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
-                final currentQuantity =
-                    context
-                        .read<CartBloc>()
-                        .carts
-                        .where((e) => e.productId == productModel.id)
-                        .map((e) => e.quantity)
-                        .firstOrNull ??
-                    0;
+               if(state is CartLoadingState){
+                 return const Center(child: CircularProgressIndicator());
+               }
+               final currentState = context.read<CartBloc>().state as CartSuccessState;
+               final currentQuantity = currentState.carts
+                   .firstWhere(
+                     (e) => e.productId == productModel.id,
+                     orElse: () => CartProductModel(productId: productModel.id, quantity: 0),
+                   )
+                   .quantity;
                 return SizedBox(
                   width: double.infinity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
-                        onPressed: () {
-                          context.read<CartBloc>().add(
-                            AddToCartEvent(
-                              userId: 1,
-                              cartProductModel: CartProductModel(
-                                productId: productModel.id,
-                                quantity: currentQuantity - 1,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.remove),
+                      Center(
+                        child: SizedBox(
+                          height: 65,
+                          width: currentQuantity>0 ? MediaQuery.of( context).size.width * 0.70 : MediaQuery.of( context).size.width * 0.85,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print("Adding to cart: ${productModel.title}");
+                              print("Current quantity in cart: $currentQuantity");
+                              final userId = context.read<AuthBloc>().userId; 
+                              context.read<CartBloc>().add(AddToCartEvent(userId: userId??-1, cartProductModel: CartProductModel(productId: productModel.id, quantity: currentQuantity + 1)));
+                            },
+                            child: const Text("Add to Cart"),
+                          ),
+                        ),
                       ),
-                      Text('$currentQuantity'),
-                      IconButton(
-                        onPressed: () {
-                          context.read<CartBloc>().add(
-                            AddToCartEvent(
-                              userId: 1,
-                              cartProductModel: CartProductModel(
-                                productId: productModel.id,
-                                quantity: currentQuantity + 1,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.add),
-                      ),
+                      if (currentQuantity > 0) ...[
+                        const SizedBox(width: 16),
+                        Text("In Cart: $currentQuantity"),
+                      ],
                     ],
                   ),
                 );
