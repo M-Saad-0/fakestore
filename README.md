@@ -20,17 +20,17 @@
   <table>
     <tr>
       <td><img src="/images/login.jpeg" width="200" alt="Login Screen"/></td>
-      <td><img src="/images/products.jpg" width="200" alt="Products Grid"/></td>
+      <td><img src="/images/products.jpeg" width="200" alt="Products Grid"/></td>
       <td><img src="/images/categories.jpeg" width="200" alt="Categories"/></td>
     </tr>
     <tr>
-      <td><img src="/images/cart.jpg" width="200" alt="Shopping Cart"/></td>
-      <td><img src="/images/drawer.jpg" width="200" alt="Navigation Drawer"/></td>
-      <td><img src="/images/user_profile.jpg" width="200" alt="User Profile"/></td>
+      <td><img src="/images/cart.jpeg" width="200" alt="Shopping Cart"/></td>
+      <td><img src="/images/drawer.jpeg" width="200" alt="Navigation Drawer"/></td>
+      <td><img src="/images/user_profile.jpeg" width="200" alt="User Profile"/></td>
     </tr>
     <tr>
-      <td><img src="/images/changing_theme.jpg" width="200" alt="Theme Switch"/></td>
-      <td><img src="/images/theme.jpg" width="200" alt="Dark Mode"/></td>
+      <td><img src="/images/changing_theme.jpeg" width="200" alt="Theme Switch"/></td>
+      <td><img src="/images/theme.jpeg" width="200" alt="Dark Mode"/></td>
       <td><img src="/images/drawerjpeg" width="200" alt="Drawer Example"/></td>
     </tr>
   </table>
@@ -39,14 +39,14 @@
 
 ## Video
 <p align="center">
-  <img src="images/demo.gif" 
+  <img src="images/demo-ezgif.com-video-to-gif-converter.gif" 
        alt="FakeStore demo" 
        width="400" 
        style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);"/>
 </p>
 
-<!-- Or centered with caption -->
+<!-- Or centered with caption
 <figure align="center">
   <img src="images/login-to-products.gif" alt="Login → Products flow" width="320"/>
   <figcaption>Login to browsing products flow</figcaption>
-</figure>
+</figure> -->
