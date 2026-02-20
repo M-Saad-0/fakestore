@@ -31,7 +31,7 @@
     <tr>
       <td><img src="/images/changing_theme.jpeg" width="200" alt="Theme Switch"/></td>
       <td><img src="/images/theme.jpeg" width="200" alt="Dark Mode"/></td>
-      <td><img src="/images/drawerjpeg" width="200" alt="Drawer Example"/></td>
+      <td><img src="/images/drawer.jpeg" width="200" alt="Drawer Example"/></td>
     </tr>
   </table>
 </div>
