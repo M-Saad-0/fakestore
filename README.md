@@ -1,16 +1,52 @@
-# fakestore
+# Fake Store App
 
-A new Flutter project.
+## How to start
 
-## Getting Started
+- When app is launched there is a login screen. Fakestore api does not support creating new accounts. So instead we have to use existing account. Two of them given on the login screen.
 
-This project is a starting point for a Flutter application.
+- When app is logged we can see the product. Select category, search products and also add them to cart.
 
-A few resources to get you started if this is your first Flutter project:
+## Working Features
+- User Authentication : Working
+- Product Listing : Working
+- Adding to Cart  : Working
+- Selecting Categories : Working
+- Searching Products : Working
+- Changing Theme : Working
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="/images/login.jpeg" width="200" alt="Login Screen"/></td>
+      <td><img src="/images/products.jpg" width="200" alt="Products Grid"/></td>
+      <td><img src="/images/categories.jpeg" width="200" alt="Categories"/></td>
+    </tr>
+    <tr>
+      <td><img src="/images/cart.jpg" width="200" alt="Shopping Cart"/></td>
+      <td><img src="/images/drawer.jpg" width="200" alt="Navigation Drawer"/></td>
+      <td><img src="/images/user_profile.jpg" width="200" alt="User Profile"/></td>
+    </tr>
+    <tr>
+      <td><img src="/images/changing_theme.jpg" width="200" alt="Theme Switch"/></td>
+      <td><img src="/images/theme.jpg" width="200" alt="Dark Mode"/></td>
+      <td><img src="/images/drawerjpeg" width="200" alt="Drawer Example"/></td>
+    </tr>
+  </table>
+</div>
+
+
+## Video
+<p align="center">
+  <img src="images/demo.gif" 
+       alt="FakeStore demo" 
+       width="400" 
+       style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);"/>
+</p>
+
+<!-- Or centered with caption -->
+<figure align="center">
+  <img src="images/login-to-products.gif" alt="Login → Products flow" width="320"/>
+  <figcaption>Login to browsing products flow</figcaption>
+</figure>

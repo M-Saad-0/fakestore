@@ -12,7 +12,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     on<GetCurrentThemeEvent>((event, emit) async {
       final themeIndexStr =
           await secureStorage.read(key: 'themeIndex') ?? 0.toString();
-      print("Retrieved theme index from storage: $themeIndexStr");
+      //print("Retrieved theme index from storage: $themeIndexStr");
       final themeIndex = int.parse(themeIndexStr);
       emit(ThemeChangeState(themeIndex: themeIndex));
     });

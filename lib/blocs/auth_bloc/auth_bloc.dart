@@ -17,12 +17,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       if (result.isFailed) {
-        print("result failed: ${result.failure}");
+        //print("result failed: ${result.failure}");
         emit(AuthErrorState(error: result.failure!));
         return;
       } else if (result.isSuccess) {
         userId = await authService.storeSession(result.value!);
-        print("Stored userId: $userId");
+        //print("Stored userId: $userId");
         if (userId == null) {
           emit(AuthErrorState(error: "Failed to store session"));
           return;

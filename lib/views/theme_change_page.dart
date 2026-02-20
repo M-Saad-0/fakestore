@@ -15,7 +15,7 @@ class ThemeChangePage extends StatelessWidget {
       body: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           if (state is ThemeInitial) {
-            print(  "ThemeInitial state: No theme loaded yet.");
+            //print(  "ThemeInitial state: No theme loaded yet.");
             return const Center(child: CircularProgressIndicator());
           }
     

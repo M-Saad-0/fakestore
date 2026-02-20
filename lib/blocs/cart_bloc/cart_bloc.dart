@@ -19,7 +19,7 @@ part 'cart_state.dart';
 //         }else{
 //           carts = [];
 //         }
-//         print(cartResult.value);
+//         //print(cartResult.value);
 //         emit(CartSuccessState(carts: cartResult.value!));
 //       } else if (cartResult.isFailed) {
 //         emit(CartErrorState(error: cartResult.failure!));
@@ -95,17 +95,23 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       event.userId,
       event.cartProductModel,
     );
-bool found = false;
-    carts = carts.map((e) {
-      if (e.productId == event.cartProductModel.productId) {
-        found = true;
-        return event.cartProductModel;
-      } else {
-        return e;
-      }
-    }).toList();
-    if(!found){
+    bool found = false;
+    carts =
+        carts.map((e) {
+          if (e.productId == event.cartProductModel.productId) {
+            found = true;
+            return event.cartProductModel;
+          } else {
+            return e;
+          }
+        }).toList();
+    if (!found) {
       carts.add(event.cartProductModel);
+    }
+    if (event.cartProductModel.quantity <= 0) {
+      carts.removeWhere((e) => e.productId == event.cartProductModel.productId);
+      // emit(CartSuccessState(carts: carts));
+      // return;
     }
     emit(CartSuccessState(carts: carts));
 
@@ -113,9 +119,5 @@ bool found = false;
       emit(CartErrorState(error: result.failure ?? 'Add failed'));
       return;
     }
-
-    // After successful add → refetch to get real server state
-    // (FakeStore creates new cart → better to refetch)
-    // add(FetchCartEvent(userId: event.userId));
   }
 }

@@ -66,8 +66,8 @@ class ProductDetailPage extends StatelessWidget {
                           width: currentQuantity>0 ? MediaQuery.of( context).size.width * 0.70 : MediaQuery.of( context).size.width * 0.85,
                           child: ElevatedButton(
                             onPressed: () {
-                              print("Adding to cart: ${productModel.title}");
-                              print("Current quantity in cart: $currentQuantity");
+                              //print("Adding to cart: ${productModel.title}");
+                              //print("Current quantity in cart: $currentQuantity");
                               final userId = context.read<AuthBloc>().userId; 
                               context.read<CartBloc>().add(AddToCartEvent(userId: userId??-1, cartProductModel: CartProductModel(productId: productModel.id, quantity: currentQuantity + 1)));
                             },

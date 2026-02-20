@@ -39,11 +39,11 @@ class CartService {
 
       if (response.data != null) {
         final List data = response.data;
-        print("userId: $userId, ");
+        //print("userId: $userId, ");
         final cartList =
             data
                 .map((e) {
-                  print("userId: ${e['userId']}, cartId: ${e['id']}");
+                  //print("userId: ${e['userId']}, cartId: ${e['id']}");
                   return CartModel.fromJson(Map<String, dynamic>.from(e));
                 })
                 .toList();

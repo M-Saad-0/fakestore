@@ -98,6 +98,12 @@ class _HomePageState extends State<HomePage> {
                             vertical: 10,
                           ),
                           child: ActionChip(
+                            side: BorderSide(
+                              color: selectedCategory ==
+                                      productCategories[index]
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.secondary,
+                            ),
                             label: Text(productCategories[index].toTitle()),
                             onPressed: () {
                               selectedCategory = productCategories[index];
